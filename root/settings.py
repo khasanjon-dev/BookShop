@@ -7,7 +7,7 @@ sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = 'django-insecure-0-vxymdz!prz+4v8s%^g^p^-$09xoc-6&a_i187i^kgu((w&mk'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -85,9 +85,9 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR / '..static')
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR / '..media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -1,3 +1,14 @@
+book shop
 
+feature
+filter(category, price, period, author)  ✅
+search(author-name, title, year)
+validator(pdf ext.)  ✅
 
-kitob rasmini olish qoldi ?
+category, book, user, author ✅
+
+1. auto count pdf pages ✅
+2. Want to get more search results? Login ✅
+3. django admin top 10, 50, 100 books (eng ko'p ko'rilgan)
+4. rasmdagidek, preview
+5. rasm yuklanmasa, pdf ni 1chi betini olib ketadi

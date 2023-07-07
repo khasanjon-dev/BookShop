@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.db.models import F
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -24,6 +24,12 @@ class BookModelViewSet(ModelViewSet):
 
         return queryset
 
+    def list(self, request, *args, **kwargs):
+        page = self.paginate_queryset(self.queryset)
+        if page is not None:
+            self.queryset.update(count_view=F('count_view') + 1)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
-# 25 tovar
-
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)

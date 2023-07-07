@@ -1,13 +1,10 @@
-import io
-from io import StringIO
+from io import BytesIO
 
 import pdfplumber
 from django.contrib.auth.models import User
-from django.core.files import File
-from django.core.files.base import ContentFile
-from django.core.files.images import ImageFile
 from django.core.validators import FileExtensionValidator
 from django.db.models import Model, CharField, FileField, ForeignKey, CASCADE, IntegerField, DateTimeField, ImageField
+from pdf2image import convert_from_bytes
 
 
 class Author(Model):
@@ -32,6 +29,7 @@ class Book(Model):
     year = IntegerField()
     page_count = IntegerField(blank=True)
     added_date = DateTimeField(auto_now=True)
+    count_view = IntegerField(default=0)
 
     """ relationships """
     author = ForeignKey('Author', CASCADE)
@@ -43,14 +41,19 @@ class Book(Model):
         if self.file:
             self.page_count = self.get_num_pages()
         if not self.image:
-            pass  # TODO: check image byte
-            # from pdf2image import convert_from_bytes
-            # self.file.seek(0)
-            # images = convert_from_bytes(self.file.read(), first_page=1, fmt='jpeg', single_file=True)
-            # name = self.file.name.split('.')[0] + '.jpeg'
-            # self.image.save(name, ContentFile(StringIO(images[0].tobytes('UTF-8').decode('UTF-8')).read()))
+            super().save(*args, **kwargs)
+            try:
+                images = convert_from_bytes(self.file.read(), first_page=1, fmt='jpeg', single_file=True)
+                name = self.file.name.split('.')[0] + '.jpeg'
+                image_bytes = images[0].tobytes()
+                self.image.save(name, BytesIO(image_bytes))
 
+                super().save(*args, **kwargs)
+            except:
+                pass
         super().save(*args, **kwargs)
+
+    # self.image.save(name, ContentFile(StringIO(images[0].tobytes('UTF-8').decode('UTF-8')).read()))
 
     def get_num_pages(self):
         with pdfplumber.open(self.file.file) as pdf:
