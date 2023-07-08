@@ -29,7 +29,7 @@ class Book(Model):
     year = IntegerField()
     page_count = IntegerField(blank=True)
     added_date = DateTimeField(auto_now=True)
-    count_view = IntegerField(default=0)
+    count_view = IntegerField(blank=True, default=0)
 
     """ relationships """
     author = ForeignKey('Author', CASCADE)
@@ -60,5 +60,5 @@ class Book(Model):
             total_pages = len(pdf.pages)
             return total_pages
 
-    class Meta:
-        ordering = ('year',)
+    def __str__(self):
+        return f'{self.title}  {self.count_view}'

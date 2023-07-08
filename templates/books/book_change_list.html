@@ -1,0 +1,16 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div>
+        <form action="api/book/get_top_10/" method="GET">
+            {% csrf_token %}
+            <button type="submit">GET TOP 10</button>
+        </form>
+        <form action="" method="GET">
+            {% csrf_token %}
+            <button type="submit">GET TOP 50</button>
+        </form>
+    </div>
+    <br/>
+    {{ block.super }}
+{% endblock %}
